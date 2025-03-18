@@ -4,6 +4,7 @@ import Navbar from "./layouts/Navbar";
 import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import ProductPage from "./pages/ProductPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route path="/" element={<HomePage />} />
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/product/:productId" element={<ProductPage />} />
             </Routes>
           </main>
           <footer className="bg-gray-800 text-white py-8">

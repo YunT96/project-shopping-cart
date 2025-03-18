@@ -1,5 +1,8 @@
 // src/pages/HomePage.jsx
 import { Link } from "react-router-dom";
+import clothingImage from "../assets/clothing.jpg";
+import jewelryImage from "../assets/jewelry.jpg";
+import electronicsImage from "../assets/electronics.jpg";
 
 const HomePage = () => {
   return (
@@ -28,41 +31,68 @@ const HomePage = () => {
           Featured Categories
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-gray-100 p-8 rounded-lg text-center">
-            <div className="text-5xl mb-4">👕</div>
-            <h3 className="text-xl font-semibold mb-2">Clothing</h3>
-            <p className="mb-4">Discover our latest fashion items</p>
-            <Link
-              to="/shop?category=clothing"
-              className="text-blue-600 font-medium hover:underline"
-            >
+          <Link
+            to="/shop?category=clothing"
+            className="block p-8 rounded-lg text-center hover:opacity-90 transition-all relative overflow-hidden h-64 flex flex-col items-center justify-center"
+          >
+            {/* Background Image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${clothingImage})`,
+              }}
+            ></div>
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-white opacity-35"></div>
+
+            {/* Content */}
+            <h3 className="text-5xl text-slate-900 font-semibold mb-2 relative z-10">
               Browse Clothing
-            </Link>
-          </div>
+            </h3>
+          </Link>
 
-          <div className="bg-gray-100 p-8 rounded-lg text-center">
-            <div className="text-5xl mb-4">💎</div>
-            <h3 className="text-xl font-semibold mb-2">Jewelry</h3>
-            <p className="mb-4">Elegant jewelry for every occasion</p>
-            <Link
-              to="/shop?category=jewelery"
-              className="text-blue-600 font-medium hover:underline"
-            >
+          <Link
+            to="/shop?category=jewelery"
+            className="block p-8 rounded-lg text-center hover:opacity-90 transition-all relative overflow-hidden h-64 flex flex-col items-center justify-center"
+          >
+            {/* Background Image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${jewelryImage})`,
+              }}
+            ></div>
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-white opacity-35"></div>
+
+            {/* Content */}
+            <h3 className="text-5xl text-slate-900 font-semibold mb-2 relative z-10">
               Browse Jewelry
-            </Link>
-          </div>
+            </h3>
+          </Link>
 
-          <div className="bg-gray-100 p-8 rounded-lg text-center">
-            <div className="text-5xl mb-4">🖥️</div>
-            <h3 className="text-xl font-semibold mb-2">Electronics</h3>
-            <p className="mb-4">The latest gadgets and devices</p>
-            <Link
-              to="/shop?category=electronics"
-              className="text-blue-600 font-medium hover:underline"
-            >
+          <Link
+            to="/shop?category=electronics"
+            className="block p-8 rounded-lg text-center hover:opacity-90 transition-all relative overflow-hidden h-64 flex flex-col items-center justify-center"
+          >
+            {/* Background Image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${electronicsImage})`,
+              }}
+            ></div>
+
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-white opacity-35"></div>
+
+            {/* Content */}
+            <h3 className="text-5xl text-slate-900 font-semibold mb-2 relative z-10">
               Browse Electronics
-            </Link>
-          </div>
+            </h3>
+          </Link>
         </div>
       </div>
 

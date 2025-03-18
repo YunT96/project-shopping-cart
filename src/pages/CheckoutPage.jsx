@@ -3,12 +3,6 @@ import { Link } from "react-router-dom";
 const CheckoutPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link
-        to="/"
-        className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-      >
-        To Homepage
-      </Link>
       <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
 
       <div className="flex flex-col items-center">
