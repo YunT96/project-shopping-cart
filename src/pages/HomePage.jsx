@@ -28,13 +28,12 @@ const HomePage = () => {
           Featured Categories
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* These would be extracted into a CategoryCard component later */}
           <div className="bg-gray-100 p-8 rounded-lg text-center">
             <div className="text-5xl mb-4">👕</div>
             <h3 className="text-xl font-semibold mb-2">Clothing</h3>
             <p className="mb-4">Discover our latest fashion items</p>
             <Link
-              to="/shop"
+              to="/shop?category=clothing"
               className="text-blue-600 font-medium hover:underline"
             >
               Browse Clothing
@@ -46,7 +45,7 @@ const HomePage = () => {
             <h3 className="text-xl font-semibold mb-2">Jewelry</h3>
             <p className="mb-4">Elegant jewelry for every occasion</p>
             <Link
-              to="/shop"
+              to="/shop?category=jewelery"
               className="text-blue-600 font-medium hover:underline"
             >
               Browse Jewelry
@@ -58,7 +57,7 @@ const HomePage = () => {
             <h3 className="text-xl font-semibold mb-2">Electronics</h3>
             <p className="mb-4">The latest gadgets and devices</p>
             <Link
-              to="/shop"
+              to="/shop?category=electronics"
               className="text-blue-600 font-medium hover:underline"
             >
               Browse Electronics

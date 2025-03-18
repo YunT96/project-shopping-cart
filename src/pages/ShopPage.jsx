@@ -1,26 +1,71 @@
 // src/pages/Shop/ShopPage.jsx
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-// import { useCart } from "../../contexts/CartContext/CartContext";
+import { Link, useLocation } from "react-router-dom";
+import ProductGrid from "../components/ProductGrid";
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  // Fetch products from FakeStore API
+  // Get category from URL query parameter
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const categoryParam = queryParams.get("category");
+
+  // Simplified categories with clothing combined
+  const categories = [
+    { id: "all", name: "All Products" },
+    { id: "clothing", name: "Clothing" },
+    { id: "jewelery", name: "Jewelry" },
+    { id: "electronics", name: "Electronics" },
+  ];
+
+  // Fetch products based on category
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("https://fakestoreapi.com/products");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
+        // Set active category from URL or default to "all"
+        const category = categoryParam || "all";
+        setActiveCategory(category);
+
+        // Handle special case for clothing category which combines men's and women's
+        if (category === "clothing") {
+          const menResponse = await fetch(
+            "https://fakestoreapi.com/products/category/men's clothing"
+          );
+          const womenResponse = await fetch(
+            "https://fakestoreapi.com/products/category/women's clothing"
+          );
+
+          if (!menResponse.ok || !womenResponse.ok) {
+            throw new Error("Failed to fetch products");
+          }
+
+          const menData = await menResponse.json();
+          const womenData = await womenResponse.json();
+
+          // Combine both clothing categories
+          setProducts([...menData, ...womenData]);
+        } else {
+          // For all other categories use standard endpoint
+          let url = "https://fakestoreapi.com/products";
+          if (category !== "all") {
+            url = `https://fakestoreapi.com/products/category/${category}`;
+          }
+
+          const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch products");
+          }
+
+          const data = await response.json();
+          setProducts(data);
         }
-
-        const data = await response.json();
-        setProducts(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -29,7 +74,7 @@ const ShopPage = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [categoryParam]);
 
   if (isLoading) {
     return (
@@ -49,92 +94,45 @@ const ShopPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link
-        to="/"
-        className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
-      >
-        To Homepage
-      </Link>
-      <h1 className="text-3xl font-bold mb-8 text-center">Shop Our Products</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-center">
+          {activeCategory === "all"
+            ? "Shop All Products"
+            : `Shop ${
+                categories.find((c) => c.id === activeCategory)?.name ||
+                activeCategory
+              }`}
+        </h1>
+      </div>
 
-      {/* This will later be extracted to a ProductGrid component */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+      {/* Category filter tabs */}
+      <div className="flex flex-wrap gap-2 mb-8 border-b pb-4">
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/shop${
+              category.id === "all" ? "" : `?category=${category.id}`
+            }`}
+            className={`px-4 py-2 rounded-lg transition-colors ${
+              activeCategory === category.id
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+            }`}
+          >
+            {category.name}
+          </Link>
         ))}
       </div>
-    </div>
-  );
-};
 
-// This will later be moved to its own file
-const ProductCard = ({ product }) => {
-  // const { addToCart } = useCart();
-  const [quantity, setQuantity] = useState(1);
-
-  const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleDecrement = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-  };
-
-  const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value);
-    setQuantity(isNaN(value) || value < 1 ? 1 : value);
-  };
-
-  const handleAddToCart = () => {
-    addToCart(product, quantity);
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow-md p-4 flex flex-col">
-      <div className="h-48 flex items-center justify-center mb-4">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="max-h-full max-w-full object-contain"
-        />
-      </div>
-
-      <h3 className="text-lg font-semibold mb-2 line-clamp-2">
-        {product.title}
-      </h3>
-      <p className="text-gray-500 text-sm mb-2 flex-grow line-clamp-2">
-        {product.description}
-      </p>
-      <p className="text-xl font-bold mb-4">${product.price.toFixed(2)}</p>
-
-      <div className="flex items-center mb-4">
-        <button
-          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-l"
-          onClick={handleDecrement}
-        >
-          -
-        </button>
-        <input
-          type="number"
-          min="1"
-          value={quantity}
-          onChange={handleQuantityChange}
-          className="w-12 h-8 text-center border-gray-200 border-y"
-        />
-        <button
-          className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-r"
-          onClick={handleIncrement}
-        >
-          +
-        </button>
-      </div>
-
-      <button
-        onClick={handleAddToCart}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
-      >
-        Add to Cart
-      </button>
+      {products.length > 0 ? (
+        <ProductGrid products={products} />
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-xl text-gray-600">
+            No products found in this category.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
